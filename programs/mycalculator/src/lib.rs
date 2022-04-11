@@ -16,6 +16,24 @@ pub mod mycalculator {
     //     Ok(())
     // }
 }
+//ctx
+#derive(Accounts)
+pub struct  create<'info> {
+    #[account(init, payer=user, space=264)]
+    pub calculator: Accounts<'info, calculator>
 
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>
+
+
+}
+
+#[account]
+pub struct Calculator {
+    pub greeting: String,
+    pub result: i64,
+    pub remainder: i64,
+}
 // #[derive(Accounts)]
 // pub struct Initialize {}

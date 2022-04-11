@@ -6,7 +6,7 @@ declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 pub mod mycalculator {
     use super::*;
 
-    pub fn create(ctx: Context<Create>, init_message: String) -> programResult {
+    pub fn create(ctx: Context<Create>, init_message: String) -> ProgramResult {
         let calculator = &mut ctx.accounts.calculator;
         calculator.greeting = init_message;
         Ok(())
@@ -17,10 +17,10 @@ pub mod mycalculator {
     // }
 }
 //ctx
-#derive(Accounts)
-pub struct  create<'info> {
+#[derive(Accounts)]
+pub struct  Create<'info> {
     #[account(init, payer=user, space=264)]
-    pub calculator: Accounts<'info, calculator>
+    pub calculator:  Account<'info, Calculator>,
 
     #[account(mut)]
     pub user: Signer<'info>,

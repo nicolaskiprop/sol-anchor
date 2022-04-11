@@ -1,16 +1,25 @@
-import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
-import { Mycalculator } from "../target/types/mycalculator";
+import assert from 'assert';
+import anchor from '@project-serum/anchor';
+const {SystemProgram} = anchor.web3
 
-describe("mycalculator", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.Provider.env());
+describe('mycalculator', () => {
+    //provider
+    const provider = anchor.Provider.local();
+    anchor.setProvider(provider)
+    const calculator = anchor.web3.Keypair.generate()
+    const program = anchor.workspace.Mycalculator
 
-  const program = anchor.workspace.Mycalculator as Program<Mycalculator>;
+    it('creates a calculator', async() => {
+        await program.rpc.create('Welcome to Sol Test (solana)', {
+            accounts: {
+                calculator: calculator.publicKey,
+                user: provider.wallet.publicKey,
+                SystemProgram: SystemProgram.programId
+            },
+            signers:[calculator]
+        })
+        const account = await program.account.calculator.fetch(calculator.publicKey)
+        assert.ok(account.greeting === "Welcome to Sol Test (solana)")
+    })
 
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const tx = await program.methods.initialize().rpc();
-    console.log("Your transaction signature", tx);
-  });
-});
+})

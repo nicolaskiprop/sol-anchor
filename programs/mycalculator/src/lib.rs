@@ -15,6 +15,13 @@ pub mod mycalculator {
     // pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
     //     Ok(())
     // }
+
+    //add fn
+    pub fn add(ctx: Context<Addition>, num1: i64, num2: i64) -> ProgramResult {
+        let calculator= &mut ctx.accounts.calculator;
+        calculator.result = num1 + num2;
+        Ok(())
+    }           
 }
 //ctx
 #[derive(Accounts)]
@@ -28,6 +35,14 @@ pub struct  Create<'info> {
 
 
 }
+
+#[derive(Accounts)]
+pub struct Addition<'info> {
+    #[account(mut)]
+    pub calculator: Account<'info, Calculator>
+} 
+
+
 
 #[account]
 pub struct Calculator {

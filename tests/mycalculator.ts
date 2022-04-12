@@ -1,5 +1,6 @@
 import assert from 'assert';
 import anchor from '@project-serum/anchor';
+import { fetchData } from '@project-serum/anchor/dist/cjs/utils/registry';
 const {SystemProgram} = anchor.web3
 
 describe('mycalculator', () => {
@@ -32,4 +33,14 @@ describe('mycalculator', () => {
         assert.ok(account.result.eq(new anchor.BN(5)))
     })
 
-})
+    it('Subtracts two numbers', async () => {
+        await program.rpc.add(new anchor.BN(9), new anchor.BN(5), {
+            accounts: {
+                calculator: calculator.publicKey
+            }
+        })
+        const account = await program.account.calculator.fetch(calculator.publicKey)
+        assert.ok(account.result.eq(new anchor.BN(4)))
+    })
+
+}) 

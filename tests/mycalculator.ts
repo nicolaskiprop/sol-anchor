@@ -43,4 +43,14 @@ describe('mycalculator', () => {
         assert.ok(account.result.eq(new anchor.BN(4)))
     })
 
+    it('Multiplies two numbers', async () => {
+        await program.rpc.multiply(new anchor.BN(3), new anchor.BN(3), {
+            accounts: {
+                calculator: calculator.publicKey
+            }
+        })
+        const account = await program.account.calculator.fetch(calculator.publicKey)
+        assert.ok(account.result.eq(new anchor.BN(9)))
+    })
+
 }) 
